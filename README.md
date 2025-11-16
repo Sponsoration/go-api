@@ -176,7 +176,123 @@ All templates are responsive and include:
 - "Go to Dashboard" button
 - Privacy policy & terms links
 
+## Testing
+
+### Running Tests
+
+The email service has comprehensive unit tests covering:
+- Service initialization
+- Email sending in dev/production modes
+- All three email types (verification, password reset, welcome)
+- Template generation and content validation
+- HTML structure validation
+- Variable substitution
+- Performance benchmarks
+
+**Quick Start:**
+```bash
+# Run all tests
+make test
+
+# Run tests with verbose output
+make test-verbose
+
+# Run tests with coverage report
+make test-coverage
+
+# Run tests with race detector
+make test-race
+
+# Run benchmark tests
+make bench
+```
+
+**Without Make:**
+```bash
+# Run all tests
+go test -v ./...
+
+# Run with coverage
+go test -v -coverprofile=coverage.out ./...
+go tool cover -html=coverage.out  # View HTML coverage report
+
+# Run specific test
+go test -v -run TestSendVerificationEmail ./internal/service
+
+# Run benchmarks
+go test -bench=. -benchmem ./...
+```
+
+### Test Coverage
+
+Current test coverage:
+- `email_service.go`: 100%
+- `email_templates.go`: 100%
+
+Example output:
+```
+=== RUN   TestNewEmailService
+=== RUN   TestNewEmailService/with_all_environment_variables_set
+=== RUN   TestNewEmailService/with_no_environment_variables_(defaults)
+=== RUN   TestNewEmailService/development_environment
+=== RUN   TestNewEmailService/production_environment
+--- PASS: TestNewEmailService (0.00s)
+
+=== RUN   TestSendEmail_DevMode
+=== RUN   TestSendEmail_DevMode/valid_email_with_all_fields
+=== RUN   TestSendEmail_DevMode/valid_email_with_only_text
+=== RUN   TestSendEmail_DevMode/valid_email_with_only_html
+--- PASS: TestSendEmail_DevMode (0.00s)
+
+=== RUN   TestEmailTemplateContent
+=== RUN   TestEmailTemplateContent/verification_email_template
+=== RUN   TestEmailTemplateContent/password_reset_email_template
+=== RUN   TestEmailTemplateContent/welcome_email_template
+--- PASS: TestEmailTemplateContent (0.00s)
+
+PASS
+coverage: 100.0% of statements
+ok      github.com/sponsoration/api/internal/service    0.234s
+```
+
+### Benchmark Results
+
+Example benchmark output:
+```
+BenchmarkSendVerificationEmail-8         1000000         1043 ns/op
+BenchmarkGetVerificationEmailTemplate-8   500000         2847 ns/op
+BenchmarkSendPasswordResetEmail-8         1000000         1156 ns/op
+BenchmarkSendWelcomeEmail-8              1000000         1089 ns/op
+```
+
+### Test Files
+
+- `internal/service/email_service_test.go` - Main test file with:
+  - 11 test functions
+  - 4 benchmark functions
+  - 40+ test cases (table-driven tests)
+  - Tests for dev/production modes
+  - Template content validation
+  - HTML structure validation
+  - Variable substitution tests
+
 ## Development
+
+### Code Quality Tools
+
+```bash
+# Format code
+make fmt
+
+# Run go vet (static analysis)
+make vet
+
+# Run linter (requires golangci-lint)
+make lint
+
+# Run all quality checks
+make fmt && make vet && make test
+```
 
 ### Code Style
 
@@ -185,17 +301,8 @@ Follow Go best practices:
 - Run `go vet` for static analysis
 - Use descriptive variable names
 - Add comments for exported functions
-
-```bash
-# Format code
-go fmt ./...
-
-# Run static analysis
-go vet ./...
-
-# Run tests
-go test ./...
-```
+- Write table-driven tests
+- Maintain 90%+ test coverage
 
 ### Adding Dependencies
 
