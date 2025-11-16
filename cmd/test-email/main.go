@@ -17,15 +17,18 @@ func main() {
 	} else {
 		fmt.Println("⚠️  Warning: No email address provided!")
 		fmt.Println("Usage: ENV=production go run cmd/test-email/main.go your-email@example.com")
-		fmt.Println("\nProceeding with default test@example.com...\n")
+		fmt.Println("\nProceeding with default test@example.com...")
 		testEmail = "test@example.com"
 	}
 
-	fmt.Println("🧪 Testing Email Service...\n")
+	fmt.Println("🧪 Testing Email Service...")
+	fmt.Println()
 	fmt.Printf("📧 Test email will be sent to: %s\n", testEmail)
 	fmt.Printf("🌍 Environment: %s\n", getEnv())
 	fmt.Printf("📨 From: %s <%s>\n", os.Getenv("SENDGRID_FROM_NAME"), os.Getenv("SENDGRID_FROM_EMAIL"))
-	fmt.Println("\n" + repeat("=", 60) + "\n")
+	fmt.Println()
+	fmt.Println(repeat("=", 60))
+	fmt.Println()
 
 	// Create email service
 	emailService := service.NewEmailService()
@@ -56,11 +59,14 @@ func main() {
 	allPassed := err1 == nil && err2 == nil && err3 == nil
 
 	if allPassed {
-		fmt.Println("\n🎉 All email tests passed!")
-		fmt.Printf("\n📬 Check your inbox at: %s\n", testEmail)
+		fmt.Println()
+		fmt.Println("🎉 All email tests passed!")
+		fmt.Println()
+		fmt.Printf("📬 Check your inbox at: %s\n", testEmail)
 		fmt.Println("   (Don't forget to check spam folder)")
 	} else {
-		fmt.Println("\n⚠️  Some email tests failed!")
+		fmt.Println()
+		fmt.Println("⚠️  Some email tests failed!")
 		fmt.Println("   Check the error messages above for details.")
 		os.Exit(1)
 	}
@@ -78,7 +84,8 @@ func printResult(err error) {
 	if err != nil {
 		log.Printf("   ❌ Failed: %v\n", err)
 	} else {
-		fmt.Println("   ✅ Success\n")
+		fmt.Println("   ✅ Success")
+		fmt.Println()
 	}
 }
 
