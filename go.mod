@@ -1,8 +1,6 @@
 module github.com/sponsoration/api
 
-go 1.24.0
-
-toolchain go1.24.10
+go 1.18
 
 require github.com/sendgrid/sendgrid-go v3.14.0+incompatible
 
